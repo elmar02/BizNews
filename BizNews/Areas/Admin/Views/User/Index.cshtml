@@ -1,0 +1,63 @@
+﻿@model List<User>
+@inject Microsoft.AspNetCore.Identity.UserManager<User> _userManager;
+@inject Microsoft.AspNetCore.Identity.RoleManager<Microsoft.AspNetCore.Identity.IdentityRole> _roleManager;
+@{
+    var count = 1;
+    var rolesLength = _roleManager.Roles.ToList().Count;
+}
+<div class="table-responsive">
+    <table id="dataTable" class="table table-dark table-hover table-bordered">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>UserName</th>
+                <th>Email</th>
+                <th>Full Name</th>
+                <th>Roles</th>
+                @if (User.IsInRole("Admin"))
+                {
+                    <th>Actions</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model)
+            {
+                var roles = await _userManager.GetRolesAsync(user);
+                <tr>
+                    <td>@(count++)</td>
+                    <td>@user.UserName</td>
+                    <td>@user.Email</td>
+                    <td>@user.FirstName @user.LastName</td>
+                    <td>
+                        @foreach (var role in roles)
+                        {
+                            <p>@role</p>
+                        }
+                    </td>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <td>
+                            @if (roles.Count != rolesLength)
+                            {
+                                <a href="/admin/user/addrole/@user.Id" class="btn btn-primary">Add Roles</a>
+                            }
+                            @if (roles.Count(x => x != "User") != 0)
+                            {
+                                <a href="/admin/user/deleterole/@user.Id" class="btn btn-danger">Delete Roles</a>
+                            }
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $('#dataTable').DataTable();
+        });
+    </script>
+}

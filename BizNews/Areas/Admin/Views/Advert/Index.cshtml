@@ -1,0 +1,23 @@
+﻿@model Advert
+
+@if(Model == null){
+    <h1>You don't have advert now</h1>
+    <a href="/admin/advert/create" class="btn btn-warning">Create</a>
+}
+else
+{
+    <a href="/admin/advert/edit" class="btn btn-info">Edit</a>
+    <a href="/admin/advert/delete" class="btn btn-danger">Delete</a>
+
+    <ul>
+        <li>
+            Link: <a href="@Model.Link">@Model.Link</a>
+        </li>
+        <li>
+            Photo: <div class="w-25"><img src="@Model.PhotoUrl" class="img-fluid"/></div>
+        </li>
+        <li>
+            Clicked Count: @Model.ClickedCount
+        </li>
+    </ul>
+}

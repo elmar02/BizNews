@@ -1,0 +1,6 @@
+﻿@model Advert
+@if(Model != null){
+    <form method="post" asp-controller="Advert" asp-action="ClickedAd" class="col-lg-8 text-center text-lg-right d-flex justify-content-end" style="height: 100px">
+        <button formtarget="_blank" type="submit" class="d-flex btn btn-link"><img class="h-100" src="@Model.PhotoUrl" alt=""></button>
+    </form>
+}

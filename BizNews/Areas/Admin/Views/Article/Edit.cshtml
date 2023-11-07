@@ -1,0 +1,75 @@
+﻿@model Article
+<form method="post" enctype="multipart/form-data">
+    @if (ViewData["Message"] != null)
+    {
+        <span class="text-danger">@ViewData["Message"]</span>
+    }
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="Title"></label>
+        <input type="text" asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <div style="height: 50vh" class="d-flex justify-content-center mb-2 bg-dark w-100">
+            <img id="image_upload_preview" src="@Model.PhotoUrl" alt="your image" class="img-fluid h-100" />
+        </div>
+        <div class="form-group d-flex gap-2 justify-content-center align-items-center bg-dark w-100">
+            <label for="Photo">Article Photo</label>
+            <input id="inputFile" name="Photo" type="file" accept="image/*" class="form-control p_input w-25">
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="Content"></label>
+        <div style="filter: invert(1)">
+            <textarea id="editor" asp-for="Content">
+
+        </textarea>
+        </div>
+        <span asp-validation-for="Content" class="text-danger"></span>
+    </div>
+    <div class="d-flex gap-3 flex-wrap">
+        <div class="form-group d-flex align-items-center gap-2">
+            <label asp-for="IsPublished">Active Article?</label>
+            <input type="checkbox" asp-for="IsPublished" class="form-check-input" />
+        </div>
+        <div class="form-group d-flex align-items-center gap-2">
+            <label asp-for="IsFeatured">Add to Featured?</label>
+            <input type="checkbox" asp-for="IsFeatured" class="form-check-input" />
+        </div>
+        <div class="form-group d-flex align-items-center gap-2">
+            <label asp-for="IsInSlider">Add to Slider?</label>
+            <input type="checkbox" asp-for="IsInSlider" class="form-check-input" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label>Choose Category</label>
+        <select class="form-select bg-dark text-white" asp-for="CategoryId">
+            @foreach (var cat in ViewData["categories"] as List<Category>)
+            {
+                <option value="@cat.Id" selected="@(cat.Id==Model.CategoryId)">@cat.CategoryName</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <label>Choose Tag(s)</label>
+        <select multiple class="form-select bg-dark text-white" name="tagIds">
+            @foreach (var tag in ViewData["tags"] as List<Tag>)
+            {
+                <option value="@tag.Id" selected="@(Model.ArticleTags.Select(x=>x.TagId).Contains(tag.Id))">@tag.TagName</option>
+            }
+        </select>
+        @if (ViewData["tagError"] != null)
+        {
+            <span class="text-danger">@ViewData["tagError"]</span>
+        }
+    </div>
+    <button type="submit" class="btn btn-warning">Update Article</button>
+</form>
+
+@section Scripts{
+    <script src="https://cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script>
+    <script>
+        CKEDITOR.replace('editor');
+    </script>
+}

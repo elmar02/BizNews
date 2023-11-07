@@ -1,0 +1,27 @@
+﻿@model FooterVM
+
+<div class="col-lg-4 col-sm-6 mb-5">
+    <h5 class="mb-4 text-white text-uppercase font-weight-bold">Popular News</h5>
+    @for (int i = 0; i < Model.PopularNews.Count; i++)
+    {
+        var item = Model.PopularNews[i];
+        <div class="@(i!=Model.PopularNews.Count-1 ? "mb-3":"")">
+            <div class="mb-2">
+                <a class="badge badge-primary text-uppercase font-weight-semi-bold p-1 mr-2"
+                   href="/category/@item.Category.SeoUrl">@item.Category.CategoryName</a>
+                <a class="text-body text-capitalize" href="/archive/@item.CreatedDate.Year/@item.CreatedDate.Month/@item.CreatedDate.Day"><small>@item.CreatedDate.ToString("MMM dd, yyyy", new CultureInfo("az-AZ"))</small></a>
+            </div>
+            <a class="small text-body text-uppercase font-weight-medium" href="/article/@item.SeoUrl?id=@item.Id">@(new string(item.Title.Take(45).ToArray()))...</a>
+        </div>
+
+    }
+</div>
+<div class="col-lg-4 mb-5">
+    <h5 class="mb-4 text-white text-uppercase font-weight-bold">Categories</h5>
+    <div class="m-n1">
+        @foreach (var item in Model.Categories)
+        {
+            <a href="/category/@item.SeoUrl" class="btn btn-sm btn-secondary m-1">@item.CategoryName</a>
+        }
+    </div>
+</div>

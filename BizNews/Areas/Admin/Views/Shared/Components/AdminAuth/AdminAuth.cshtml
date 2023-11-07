@@ -1,0 +1,52 @@
+﻿@model User
+<li class="nav-item profile">
+    <div class="profile-desc">
+        <div class="profile-pic">
+            <div class="count-indicator">
+                <img class="img-xs rounded-circle " src=@Model.PhotoUrl alt="">
+                <span class="count bg-success"></span>
+            </div>
+            <div class="profile-name">
+                <h5 class="mb-0 font-weight-normal">@Model.FirstName @Model.LastName</h5>
+                <span>@Model.UserName</span>
+            </div>
+        </div>
+        <a href="#" id="profile-dropdown" data-bs-toggle="dropdown"><i class="mdi mdi-dots-vertical"></i></a>
+        <div class="dropdown-menu dropdown-menu-right sidebar-dropdown preview-list" aria-labelledby="profile-dropdown">
+            <a href="/auth/changePassword" class="dropdown-item preview-item">
+                <div class="preview-thumbnail">
+                    <div class="preview-icon bg-dark rounded-circle">
+                        <i class="mdi mdi-onepassword  text-info"></i>
+                    </div>
+                </div>
+                <div class="preview-item-content">
+                    <p class="preview-subject ellipsis mb-1 text-small">Change Password</p>
+                </div>
+            </a>
+            <div class="dropdown-divider"></div>
+            <form method="post" asp-area="" asp-controller="Auth" asp-action="Logout" class="dropdown-item preview-item">
+                <button type="submit" class="bg-transparent text-white border-0 w-100 d-flex align-items-center">
+                    <div class="preview-thumbnail">
+                        <div class="preview-icon bg-dark rounded-circle">
+                            <i class="mdi mdi-settings text-primary"></i>
+                        </div>
+                    </div>
+                    <div class="preview-item-content">
+                        <p class="preview-subject ellipsis mb-1 text-small">Log Out</p>
+                    </div>
+                </button>
+            </form>
+            <div class="dropdown-divider"></div>
+            <a href="/auth/editProfile?ReturnUrl=%2Fadmin" class="dropdown-item preview-item">
+                <div class="preview-thumbnail">
+                    <div class="preview-icon bg-dark rounded-circle">
+                        <i class="mdi mdi-onepassword  text-info"></i>
+                    </div>
+                </div>
+                <div class="preview-item-content">
+                    <p class="preview-subject ellipsis mb-1 text-small">Change Profile</p>
+                </div>
+            </a>
+        </div>
+    </div>
+</li>

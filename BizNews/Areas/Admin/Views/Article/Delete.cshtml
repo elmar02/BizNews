@@ -1,0 +1,7 @@
+﻿@model Article
+<h1>Are you sure you want to add @Model.Title article to recycle bin?</h1>
+
+<form method="post">
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a href="/admin/article" class="btn btn-warning">Cancel</a>
+</form>

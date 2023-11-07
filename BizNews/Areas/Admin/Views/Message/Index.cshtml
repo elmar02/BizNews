@@ -1,0 +1,37 @@
+﻿@model List<Contact>
+
+@{
+    var seenMessages = Model.Where(x => x.IsSeen).ToList();
+    var unSeenMessages = Model.Where(x => !x.IsSeen).ToList();
+}
+
+@if (unSeenMessages.Count!=0)
+{
+    <h1 class="text-danger">Unseen messages (@unSeenMessages.Count)</h1>
+    <div class="gap-2">
+        @foreach (var message in unSeenMessages)
+        {
+            <div class="border-top border-bottom p-3">
+                <h2>@message.Subject</h2>
+                <span class="text-white-50">by @message.FirstName (@message.Email) added on @message.CreatedDate.ToString("dd MM yyyy, HH:mm")</span>
+                <p style="font-size: 1.5rem">"@message.Message"</p>
+                <a class="btn btn-info" href="mailto:@message.Email?subject=@Uri.EscapeDataString($"Reply for '{message.Subject}' message")">Reply</a>
+            </div>
+        }
+    </div>
+
+    <hr />
+}
+
+<h1 class="text-success">Seen messages</h1>
+<div class="gap-2">
+    @foreach (var message in seenMessages)
+    {
+        <div class="border-top border-bottom p-3">
+            <h2>@message.Subject</h2>
+            <span class="text-white-50">by @message.FirstName (@message.Email) added on @message.CreatedDate.ToString("dd MM yyyy, HH:mm")</span>
+            <p style="font-size: 1.2rem">"@message.Message"</p>
+            <a class="btn btn-info" href="mailto:@message.Email?subject=@Uri.EscapeDataString($"Reply for '{message.Subject}' message")">Reply</a>
+        </div>
+    }
+</div>

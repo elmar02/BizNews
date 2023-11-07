@@ -1,0 +1,41 @@
+﻿@model List<Microsoft.AspNetCore.Identity.IdentityRole>
+@{
+    int i = 1;
+}
+@if (User.IsInRole("Admin"))
+{
+    <a href="role/create" class="btn btn-warning">Create Role</a>
+}
+<div class="table-responsive">
+    <table class="table table-dark table-hover table-bordered">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Role Name</th>
+                @if(User.IsInRole("Admin"))
+                {
+                    <th>Delete</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var role in Model)
+            {
+                <tr>
+                    <td>@(i++)</td>
+                    <td>@role.Name</td>
+                    @if (User.IsInRole("Admin"))
+                        {
+                            <td>
+                                @if (!(role.Name == "Admin" || role.Name == "User"))
+                                {
+                                    <a href="/admin/role/delete/@role.Id" class="btn btn-danger">Delete</a>
+
+                                }
+                            </td>
+                        }
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

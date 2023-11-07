@@ -1,0 +1,7 @@
+﻿@model Article
+<h1>Are you sure you want to restore @Model.Title article?</h1>
+
+<form method="post">
+    <button type="submit" class="btn btn-danger">Restore</button>
+    <a href="/admin/trash" class="btn btn-warning">Cancel</a>
+</form>

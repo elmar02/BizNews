@@ -1,0 +1,10 @@
+﻿@model Microsoft.AspNetCore.Identity.IdentityRole
+<form method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="Name" class="form-label"></label>
+        <input type="text" asp-for="Name" class="form-control"/>
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-warning">Create Role</button>
+</form>

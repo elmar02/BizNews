@@ -1,0 +1,34 @@
+﻿@model List<HistoryRecord>
+
+<div class="container-fluid">
+    <div class="container">
+        <div class="section-title d-flex justify-content-md-between flex-column flex-md-row mt-5">
+            <h4 class="m-0 text-uppercase font-weight-bold">History</h4>
+        </div>
+
+        @{
+            var count = 1;
+        }
+
+        <table class="table table-light table-hover table-bordered table-striped">
+            <thead class="text-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Seen Date</th>
+                    <th>Article</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr class="text-dark">
+                        <td>@(count++)</td>
+                        <td>@item.SeenDate</td>
+                        <td><a href="/article/@item.Article.SeoUrl?id=@item.ArticleId" class="text-black-50">@item.Article.Title</a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+

@@ -1,0 +1,63 @@
+﻿@{
+    Layout = "_AuthLayout";
+}
+
+@model RegisterDTO
+<h3 class="card-title text-left mb-3">Register</h3>
+<form method="post" enctype="multipart/form-data">
+    <div class="text-danger" asp-validation-summary="All"></div>
+    <div class="d-flex gap-2">
+        <div class="form-group">
+            <label asp-for="FirstName"></label>
+            <input asp-for="FirstName" type="text" class="form-control p_input">
+        </div>
+        <div class="form-group">
+            <label asp-for="LastName"></label>
+            <input asp-for="LastName" type="text" class="form-control p_input">
+        </div>
+    </div>
+    <div class="d-flex gap-2">
+        <div class="form-group">
+            <label asp-for="UserName"></label>
+            <input asp-for="UserName" type="text" class="form-control p_input">
+        </div>
+        <div class="form-group">
+            <label asp-for="Email"></label>
+            <input asp-for="Email" type="email" class="form-control p_input">
+        </div>
+    </div>
+    <div class="d-flex gap-2">
+        <div class="form-group">
+            <label asp-for="Password"></label>
+            <input asp-for="Password" type="password" class="form-control p_input">
+        </div>
+        <div class="form-group">
+            <label asp-for="ConfirmPassword"></label>
+            <input asp-for="ConfirmPassword" type="password" class="form-control p_input">
+        </div>
+    </div>
+
+    <div class="d-flex gap-2">
+        <div class="w-25">
+            <img id="image_upload_preview" src="/uploads/default.png" alt="your image" class="img-fluid object-fit-contain" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Photo">ProfilePhoto</label>
+            <input id="inputFile" asp-for="Photo" type="file" accept="image/*" class="form-control p_input">
+        </div>
+    </div>
+
+    <div class="d-flex gap-2 justify-content-between align-items-center">
+        <div class="form-group d-flex align-items-center justify-content-between">
+            <div class="form-check">
+                <label class="form-check-label">
+                    <input asp-for="RememberMe" type="checkbox" class="form-check-input"> Remember me
+                </label>
+            </div>
+        </div>
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary btn-block enter-btn">Register</button>
+        </div>
+    </div>
+    <p class="sign-up text-center">Already have an Account?<a href="/auth/login"> Sign In</a></p>
+</form>

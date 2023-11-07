@@ -1,0 +1,7 @@
+﻿@model int
+<a href="/notify" class="d-inline-flex align-items-center position-relative" style="margin-left: 10px; font-size: 1.5em;"><i class="fa-regular fa-bell"></i> 
+    @if (Model != 0)
+    {
+        <span class="text-white bg-danger position-absolute d-flex justify-content-center align-items-center rounded-circle" style="font-size: 12px;width:18px;height:18px; bottom: 15px;right:-5px;">@Model</span>
+    }
+</a>

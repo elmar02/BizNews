@@ -1,0 +1,257 @@
+﻿@model ArticleDetailVM
+
+<!-- Breaking News Start -->
+<div class="container-fluid mt-5 mb-3 pt-3">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-12">
+                <div class="d-flex justify-content-between">
+                    <div class="section-title border-right-0 mb-0" style="width: 280px;">
+                        <h4 class="m-0 text-uppercase font-weight-bold">Breaking News</h4>
+                    </div>
+                    <div class="owl-carousel tranding-carousel position-relative d-inline-flex align-items-center bg-white border border-left-0"
+                         style="width: calc(100% - 280px); padding-right: 100px;">
+                         @foreach (var item in Model.BreakingNews)
+                        {
+                            <div class="text-truncate"><a class="text-secondary text-uppercase font-weight-semi-bold" href="/article/@item.SeoUrl?id=@item.Id">@item.Title</a></div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Breaking News End -->
+<!-- News With Sidebar Start -->
+<div class="container-fluid">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <!-- News Detail Start -->
+                <div class="position-relative mb-3">
+                    <img class="img-fluid w-100" src="@Model.Article.PhotoUrl" style="object-fit: cover;">
+                    <div class="bg-white border border-top-0 p-4">
+                        <div class="mb-3">
+                            <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2"
+                               href="/category/@Model.Article.Category.SeoUrl">@Model.Article.Category.CategoryName</a>
+                            <a class="text-body text-capitalize" href="/archive/@Model.Article.CreatedDate.Year/@Model.Article.CreatedDate.Month/@Model.Article.CreatedDate.Day"><small>@Model.Article.CreatedDate.ToString("MMM dd, yyyy", new CultureInfo("az-AZ"))</small></a>
+                        </div>
+                        <h1 class="mb-3 text-secondary text-uppercase font-weight-bold">@Model.Article.Title</h1>
+                        @Html.Raw(Model.Article.Content)
+                    </div>
+                    <div class="d-flex justify-content-between bg-white border border-top-0 p-4">
+                        <div class="d-flex align-items-center">
+                            <img class="rounded-circle mr-2" src="@Model.Article.User.PhotoUrl" width="25" height="25" alt="">
+                            <span>@Model.Article.User.UserName</span>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <span class="ml-3"><i class="far fa-eye mr-2"></i>@Model.Article.ViewCount</span>
+                            <span class="ml-3"><i class="far fa-comment mr-2"></i>@Model.Article.Comments.Count</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- News Detail End -->
+                <!-- Other News-->
+                <div class="row px-2 mb-3 justify-content-between">
+                    @if (Model.PreArticle != null)
+                    {
+                        <div class="col-12 @(Model.PostArticle == null?"":"col-lg-6") bg-white p-3 d-flex flex-column justify-content-center border border-left-0">
+                            <div class="mb-2">
+                                <span class="badge badge-primary text-uppercase font-weight-semi-bold p-1 mr-2">Previous Article</span>
+                                <a class="text-body text-capitalize" href="/archive/@Model.PreArticle.CreatedDate.Year/@Model.PreArticle.CreatedDate.Month/@Model.PreArticle.CreatedDate.Day"><small>@Model.PreArticle.CreatedDate.ToString("MMM dd, yyyy", new CultureInfo("az-AZ"))</small></a>
+                            </div>
+                            <a class="h6 m-0 text-secondary text-uppercase font-weight-bold" href="/article/@Model.PreArticle.SeoUrl?id=@Model.PreArticle.Id">@(new string(Model.PreArticle.Title.Take(25).ToArray()))...</a>
+                        </div>
+                    }
+                    @if (Model.PostArticle != null)
+                    {
+                        <div class="col-12 @(Model.PreArticle == null?"":"col-lg-6") bg-white p-3 d-flex flex-column justify-content-center border border-left-0">
+                            <div class="mb-2">
+                                <span class="badge badge-primary text-uppercase font-weight-semi-bold p-1 mr-2">Next Article</span>
+                                <a class="text-body text-capitalize" href="/archive/@Model.PostArticle.CreatedDate.Year/@Model.PostArticle.CreatedDate.Month/@Model.PostArticle.CreatedDate.Day"><small>@Model.PostArticle.CreatedDate.ToString("MMM dd, yyyy", new CultureInfo("az-AZ"))</small></a>
+                            </div>
+                            <a class="h6 m-0 text-secondary text-uppercase font-weight-bold" href="/article/@Model.PostArticle.SeoUrl?id=@Model.PostArticle.Id">@(new string(Model.PostArticle.Title.Take(25).ToArray()))...</a>
+                        </div>
+                    }
+                </div>
+                <!-- Comment List Start -->
+                <div class="mb-3">
+                    <div class="section-title mb-0">
+                        <h4 class="m-0 text-uppercase font-weight-bold">@Model.Article.Comments.Count Comments</h4>
+                    </div>
+                    @if (Model.Article.Comments.Count != 0)
+                    {
+                        <div class="bg-white border border-top-0 px-4 pt-4">
+                            @foreach (var comment in Model.Article.Comments.Where(x=>x.ParentCommentId == null).OrderByDescending(x=>x.CreatedDate))
+                            {
+                                <div class="media mb-4">
+                                    <img src="@comment.User.PhotoUrl" alt="Image" class="img-fluid mr-3 mt-1" style="width: 45px;">
+                                    <div class="media-body">
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <h6 class="m-0"><a class="text-secondary font-weight-bold">@comment.User.UserName</a> <small><i>@AgoHelper.AgoConvertor(comment.CreatedDate)</i></small></h6>
+                                            @if (Model.CurrentUserId == comment.UserId || Model.Article.UserId == Model.CurrentUserId)
+                                            {
+                                                <form method="post" style="margin-left:10px" asp-controller="Comment" asp-action="Delete">
+                                                    <input type="hidden" name="id" value="@comment.Id" />
+                                                    <input type="hidden" name="articleId" value="@comment.ArticleId" />
+                                                    <button type="submit" class="btn-link p-0 text-danger" style="outline:none; vertical-align: baseline; border: none; background:inherit; font-size:0.8em;" onclick="return confirm('Are you sure you want to delete this comment?')"><i class="fa-solid fa-trash"></i></button>
+                                                </form>
+                                            }
+                                        </div>
+                                        <p class="m-0">
+                                            @comment.Content
+                                        </p>
+                                        <form method="post" class="d-flex" asp-controller="Comment" asp-action="AddReply">
+                                            <input type="hidden" value="@comment.Id" name="id" />
+                                            <input type="text" name="reply" class="form-control" placeholder="Type something..." />
+                                            <button class="btn btn-sm btn-outline-secondary">Reply</button>
+                                        </form>
+                                        @if (comment.Replies.Count!=0)
+                                        {
+                                            <a class="badge badge-secondary" data-toggle="collapse" href="#collapseExample_@comment.Id" role="button" aria-expanded="false" aria-controls="collapseExample_@comment.Id">
+                                                See @comment.Replies.Count replies
+                                            </a>
+                                        <div class="collapse" id="collapseExample_@comment.Id">
+                                            @{
+                                                ReplyVM replyVM = new()
+                                                {
+                                                    Replies = comment.Replies.OrderBy(x=>x.CreatedDate).ToList(),
+                                                    CurrentUserId = Model.CurrentUserId,
+                                                    UserId = Model.Article.UserId
+                                                };
+                                            }
+                                            @await Html.PartialAsync("_CommentReplies", replyVM)
+                                        </div>    
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+
+                </div>
+                <!-- Comment List End -->
+                <!-- Comment Form Start -->
+                <div class="mb-3">
+                    <div class="section-title mb-0">
+                        <h4 class="m-0 text-uppercase font-weight-bold">Leave a comment</h4>
+                    </div>
+                    <div class="bg-white border border-top-0 p-4">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <form method="post" asp-action="AddComment" asp-controller="Comment">
+                                <input type="hidden" name="id" value="@Model.Article.Id" />
+                                <div class="form-group">
+                                    <textarea id="message" name="comment" cols="30" rows="5" class="form-control" placeholder="Type something..." required></textarea>
+                                </div>
+                                <div class="form-group mb-0">
+                                    <button type="submit"
+                                           class="btn btn-primary font-weight-semi-bold py-2 px-3">
+                                        Leave a comment
+                                    </button>
+                                </div>
+                            </form>
+                        }
+                        else
+                        {
+                            <a class="btn btn-primary font-weight-semi-bold py-2 px-3" href="/auth/login">Login to comment</a>
+                        }
+                    </div>
+                </div>
+                <!-- Comment Form End -->
+            </div>
+
+            <div class="col-lg-4">
+                <!-- Social Follow Start -->
+                <div class="mb-3">
+                    <div class="section-title mb-0">
+                        <h4 class="m-0 text-uppercase font-weight-bold">Follow Us</h4>
+                    </div>
+                    <div class="bg-white border border-top-0 p-3">
+                        <a href="" class="d-block w-100 text-white text-decoration-none mb-3" style="background: #39569E;">
+                            <i class="fab fa-facebook-f text-center py-4 mr-3" style="width: 65px; background: rgba(0, 0, 0, .2);"></i>
+                            <span class="font-weight-medium">12,345 Fans</span>
+                        </a>
+                        <a href="" class="d-block w-100 text-white text-decoration-none mb-3" style="background: #52AAF4;">
+                            <i class="fab fa-twitter text-center py-4 mr-3" style="width: 65px; background: rgba(0, 0, 0, .2);"></i>
+                            <span class="font-weight-medium">12,345 Followers</span>
+                        </a>
+                        <a href="" class="d-block w-100 text-white text-decoration-none mb-3" style="background: #0185AE;">
+                            <i class="fab fa-linkedin-in text-center py-4 mr-3" style="width: 65px; background: rgba(0, 0, 0, .2);"></i>
+                            <span class="font-weight-medium">12,345 Connects</span>
+                        </a>
+                        <a href="" class="d-block w-100 text-white text-decoration-none mb-3" style="background: #C8359D;">
+                            <i class="fab fa-instagram text-center py-4 mr-3" style="width: 65px; background: rgba(0, 0, 0, .2);"></i>
+                            <span class="font-weight-medium">12,345 Followers</span>
+                        </a>
+                        <a href="" class="d-block w-100 text-white text-decoration-none mb-3" style="background: #DC472E;">
+                            <i class="fab fa-youtube text-center py-4 mr-3" style="width: 65px; background: rgba(0, 0, 0, .2);"></i>
+                            <span class="font-weight-medium">12,345 Subscribers</span>
+                        </a>
+                        <a href="" class="d-block w-100 text-white text-decoration-none" style="background: #055570;">
+                            <i class="fab fa-vimeo-v text-center py-4 mr-3" style="width: 65px; background: rgba(0, 0, 0, .2);"></i>
+                            <span class="font-weight-medium">12,345 Followers</span>
+                        </a>
+                    </div>
+                </div>
+                <!-- Social Follow End -->
+                @if (Model.Advert != null)
+                {
+                    <!-- Ads Start -->
+                    <div class="mb-3">
+                        <div class="section-title mb-0">
+                            <h4 class="m-0 text-uppercase font-weight-bold">Advertisement</h4>
+                        </div>
+                        <form method="post" asp-controller="Advert" asp-action="ClickedAd">
+                            <div class="bg-white text-center border border-top-0 p-3">
+                                <button class="btn btn-link" formtarget="_blank" type="submit"><img class="img-fluid" src="@Model.Advert.PhotoUrl" alt=""></button>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- Ads End -->
+                }
+                @if (Model.SimilarArticles.Count !=0)
+                {
+                    <!-- Popular News Start -->
+                    <div class="mb-3">
+                        <div class="section-title mb-0">
+                            <h4 class="m-0 text-uppercase font-weight-bold">Similar News</h4>
+                        </div>
+                        <div class="bg-white border border-top-0 p-3">
+                            @foreach (var item in Model.SimilarArticles)
+                            {
+                                <div class="d-flex align-items-center bg-white mb-3" style="height: 110px;">
+                                    <img class="img-fluid" style="height: 110px; width:110px;" src="@item.PhotoUrl" alt="">
+                                    <div class="w-100 h-100 px-3 d-flex flex-column justify-content-center border border-left-0">
+                                        <div class="mb-2">
+                                            <a class="badge badge-primary text-uppercase font-weight-semi-bold p-1 mr-2" href="/category/@item.Category.SeoUrl">@item.Category.CategoryName</a>
+                                            <a class="text-body text-capitalize" href="/archive/@item.CreatedDate.Year/@item.CreatedDate.Month/@item.CreatedDate.Day"><small>@item.CreatedDate.ToString("MMM dd, yyyy", new CultureInfo("az-AZ"))</small></a>
+                                        </div>
+                                        <a class="h6 m-0 text-secondary text-uppercase font-weight-bold" href="/article/@item.SeoUrl?id=@item.Id">@(new string(item.Title.Take(25).ToArray()))...</a>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    <!-- Popular News End -->
+                }
+                <!-- Tags Start -->
+                <div class="mb-3">
+                    <div class="section-title mb-0">
+                        <h4 class="m-0 text-uppercase font-weight-bold">Article Tags</h4>
+                    </div>
+                    <div class="bg-white border border-top-0 p-3">
+                        <div class="d-flex flex-wrap m-n1">
+                            @foreach (var item in Model.Article.ArticleTags)
+                            {
+                                <a href="/tag/@item.Tag.SeoUrl" class="btn btn-sm btn-outline-secondary m-1">@item.Tag.TagName</a>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <!-- Tags End -->
+            </div>
+        </div>
+    </div>
+</div>
+<!-- News With Sidebar End -->

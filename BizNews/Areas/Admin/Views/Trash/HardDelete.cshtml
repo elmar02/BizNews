@@ -1,0 +1,7 @@
+﻿@model Article
+<h1>Article @Model.Title will be deleted permanently. Are you sure?</h1>
+
+<form method="post">
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a href="/admin/trash" class="btn btn-warning">Cancel</a>
+</form>

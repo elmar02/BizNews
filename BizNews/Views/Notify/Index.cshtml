@@ -1,0 +1,32 @@
+﻿@model List<Notify>
+
+@{
+    var unseenCount = Model.Where(x => x.IsSeen == false).ToList().Count;
+}
+<div class="container mt-5">
+    <h2 class="mb-4">Notifications 
+        @if (unseenCount != 0)
+        {
+            <span class="px-3 py-2 bg-primary rounded-pill">@unseenCount</span>
+        }
+    </h2>
+        @foreach (var item in Model)
+        {
+            <div class="mb-3 d-flex align-items-center p-4 bg-light" style="@(!item.IsSeen? "border-left: 7px solid #FFCC00;":"")">
+                <div class="message-box flex-grow-1">
+                    <a href="@item.Link" class="meesage text-dark mb-1">
+                        @Html.Raw(item.Message)
+                    </a>
+                    <br />
+                    <span>@AgoHelper.AgoConvertor(item.CreatedDate)</span>
+                </div>
+                <div class="photo">
+                    <img src="@item.PhotoUrl" alt="" class="img-fluid rounded-circle" style="object-fit:cover; object-position: center center; width:50px;height:50px;" />
+                </div>
+            </div>
+        }
+    @if(Model.Count == 0)
+    {
+        <p>You have no notification yet.</p>
+    }
+</div>

@@ -1,0 +1,8 @@
+﻿@model List<Category>
+
+<div class="mt-5">
+    @foreach (var item in Model)
+    {
+        <a href="/category/@item.SeoUrl" class="w-100 btn btn-dark" style="border-bottom: 1px solid gray">@item.CategoryName</a>
+    }
+</div>

@@ -1,0 +1,15 @@
+﻿@model User
+<div class="nav-item dropdown">
+    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">@Model.UserName</a>
+    <div class="dropdown-menu rounded-0 m-0">
+        @if (User.IsInRole("Author") || User.IsInRole("Admin Editor"))
+        {
+            <a href="/article/myArticles" class="dropdown-item myArticles">My Articles</a>
+        }
+        <a href="/auth/editProfile" class="dropdown-item">Edit Profile</a>
+        <a href="/auth/changePassword" class="dropdown-item">Change Password</a>
+        <form method="post" asp-area="" asp-controller="Auth" asp-action="Logout" class="dropdown-item">
+            <button class="btn btn-icon-text p-0 border-0" style="color: black" type="submit">Log Out</button>
+        </form>
+    </div>
+</div>

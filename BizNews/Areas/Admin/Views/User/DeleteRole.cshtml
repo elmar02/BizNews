@@ -1,0 +1,14 @@
+﻿@model UserRoleVM
+
+<form method="post">
+    <div class="form-group">
+        <input name="userId" type="hidden" value="@Model.User.Id" />
+        <select class="form-select" name="role">
+            @foreach (var role in Model.Roles)
+            {
+                <option value="@role">@role</option>
+            }
+        </select>
+    </div>
+    <button type="submit" class="btn btn-danger">Delete Role</button>
+</form>

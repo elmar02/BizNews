@@ -1,0 +1,10 @@
+﻿@model int
+
+<li class="nav-item menu-items">
+    <a class="nav-link" href="/admin/message">
+        <span class="menu-icon">
+            <i class="mdi mdi-speedometer"></i>
+        </span>
+        <span class="menu-title">Message <span class="text-danger">@(Model != 0 ? $"({Model})" : "")</span></span>
+    </a>
+</li>

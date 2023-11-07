@@ -1,0 +1,89 @@
+﻿@model List<Article>
+@{
+    var count = 1;
+}
+<a href="/admin/article/create" class="btn btn-warning">Create</a>
+
+<div class="table-responsive">
+    <table id="dataTable" class="table table-dark table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Title</th>
+                <th>Photo</th>
+                <th>View Count</th>
+                <th>Created By</th>
+                <th>Created Date</th>
+                <th>Updated By</th>
+                <th>Updated Date</th>
+                <th>Status</th>
+                <th>Category</th>
+                <th>Tags</th>
+                <th>IsFeatured</th>
+                <th>Is in Slider?</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var article in Model)
+            {
+                <tr>
+                    <td>@(count++)</td>
+                    <td>@article.Title</td>
+                    <td><img src="@article.PhotoUrl" class="img-fluid" /></td>
+                    <td>@article.ViewCount</td>
+                    <td>@article.CreatedBy</td>
+                    <td>@article.CreatedDate</td>
+                    <td>@(article.UpdatedBy == null ? "Not updated yet" : article.UpdatedBy)</td>
+                    <td>@(article.UpdatedDate == null ? "Not updated yet" : article.UpdatedDate)</td>
+                    <td>@(article.IsPublished ? "Active" : "Inactive")</td>
+                    <td>@article.Category.CategoryName</td>
+                    <td>
+                        <div class="row gap-2">
+                            @foreach (var tag in article.ArticleTags)
+                            {
+                                <div class="col-6">
+                                    <span class="btn btn-info">@tag.Tag.TagName</span>
+                                </div>
+                            }
+                        </div>
+                    </td>
+                    <td>@(article.IsFeatured ? "Yes" : "No")</td>
+                    <td>@(article.IsInSlider ? "Yes" : "No")</td>
+                    <td class="gap-2">
+                        <a href="/admin/article/delete/@article.Id" class="btn btn-danger">Delete</a>
+                        <a href="/admin/article/edit/@article.Id" class="btn btn-warning">Edit</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+        <tF>
+            <tr>
+                <th>#</th>
+                <th>Title</th>
+                <th>Photo</th>
+                <th>View Count</th>
+                <th>Created By</th>
+                <th>Created Date</th>
+                <th>Updated By</th>
+                <th>Updated Date</th>
+                <th>Status</th>
+                <th>Category</th>
+                <th>Tags</th>
+                <th>IsFeatured</th>
+                <th>Is in Slider?</th>
+                <th>Actions</th>
+            </tr>
+        </tF>
+
+    </table>
+
+</div>
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $('#dataTable').DataTable();
+        });
+    </script>
+}
